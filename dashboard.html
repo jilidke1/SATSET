@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Daftar Absensi Mahasiswa</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.dataTables.min.css" />
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6; /* bg-gray-100 */
+        }
+        /* Custom styles for DataTables to look better with Tailwind */
+        .dataTables_wrapper .dataTables_filter input {
+            @apply px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm;
+        }
+        .dataTables_wrapper .dataTables_length select {
+            @apply px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm;
+        }
+        .dataTables_wrapper .dataTables_paginate .paginate_button {
+            @apply px-4 py-2 mx-1 border border-gray-300 rounded-md bg-white text-gray-700 hover:bg-gray-50;
+        }
+        /* Mempercantik tombol paginasi saat ini (misal: "1") */
+        .dataTables_wrapper .dataTables_paginate .paginate_button.current {
+            @apply bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150;
+        }
+        .dataTables_wrapper .dataTables_paginate .paginate_button.disabled {
+            @apply opacity-50 cursor-not-allowed;
+        }
+        table.dataTable thead th,
+        table.dataTable tbody td {
+            @apply px-4 py-2 text-left;
+        }
+        table.dataTable thead th {
+            @apply bg-gray-200 font-semibold text-gray-700;
+        }
+        table.dataTable tbody tr:nth-child(odd) {
+            @apply bg-gray-50;
+        }
+        table.dataTable tbody tr:hover {
+            @apply bg-gray-100;
+        }
+        /* Style untuk membuat isi tabel menjadi tengah */
+        table.dataTable tbody td {
+            text-align: center;
+        }
+        table.dataTable thead th {
+            text-align: center;
+        }
+        /* Responsive adjustments (optional, DataTables Responsive should handle this) */
+        /* @media (max-width: 640px) {
+            .container {
+                padding: 1rem;
+            }
+            .text-3xl {
+                font-size: 2xl;
+            }
+            .sm\:flex-row {
+                flex-direction: column;
+            }
+            .sm\:space-x-4 {
+                space-x-0;
+            }
+            .sm\:space-y-0 {
+                space-y-4;
+            }
+            .sm\:w-auto, .w-full {
+                width: 100%;
+            }
+        } */
+    </style>
+</head>
+<body class="p-4 sm:p-6 md:p-8">
+    <div class="container mx-auto bg-white shadow-lg rounded-lg p-6 sm:p-8">
+        <div class="text-center mb-6">
+            <h1 class="text-3xl sm:text-4xl font-bold text-gray-800 mb-2">Status Absensi Kelas ...</h1>
+            <p id="packageName" class="text-gray-600 text-lg"></p>
+        </div>
+
+        <div>
+        <div class="flex flex-col sm:flex-row items-center justify-between mb-6 space-y-4 sm:space-y-0 sm:space-x-4">
+            <a href="input.html" class="w-full sm:w-auto px-6 py-3 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150 text-center">
+                + Tambah Siswa
+            </a>
+            <div id="loadingIndicator" class="hidden text-indigo-600 font-medium">
+                Memuat data...
+            </div>
+                    <div class="flex flex-col sm:flex-row items-center justify-between mb-6 space-y-4 sm:space-y-0 sm:space-x-4">
+            <a href="about.html" class="w-full sm:w-auto px-6 py-3 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150 text-center">
+                Tentang Alat Ini
+            </a>
+            <div id="loadingIndicator" class="hidden text-indigo-600 font-medium">
+                Memuat data...
+            </div>
+            
+        </div>
+    
+        </div>
+        
+        <div class="overflow-x-auto rounded-lg shadow-md">
+            <table id="studentDataTable" class="min-w-full table-auto">
+                <thead>
+                    <tr>
+                        <th>Nomor Absen</th>
+                        <th>Nama</th>
+                        <th>Absensi (Hadir/Alpha)</th>
+                        <th>Status Absensi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    </tbody>
+            </table>
+        </div>
+
+        <p id="passingGrade" class="mt-6 text-gray-600 text-center"></p>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+<script type="text/javascript">
+        // TEMPATKAN URL WEB APP ANDA DI SINI
+        // URL ini harus dari deployment Web App Google Apps Script Anda.
+        // Pastikan Anda telah melakukan 'Deploy' > 'New deployment' di Apps Script Editor,
+        // memilih 'Web app' sebagai tipe, 'Execute as: Me', dan 'Who has access: Anyone'.
+        // Contoh URL: https://script.google.com/macros/s/AKfycbyMRh5oyV7fKmkmmt6cLvCKE1qnguoCqrYieFLhcVoYAyxOG07l9bBkiRdrcAmkovPi/exec
+        const WEB_APP_BASE_URL = "https://script.google.com/macros/s/AKfycbypohF846t99r8eG5zjblc96oijsHjZ86s5HkrZaYHFoeg_782s72MtuBuhAhBz2Mzw/exec";
+        const MAIN_TAB_DATA_URL = WEB_APP_BASE_URL + "?mode=data"; // URL untuk mengambil data dari tab 'main tab'
+
+        let dataTableInstance; // Variabel untuk menyimpan instance DataTables
+
+        $(document).ready(function () {
+            const loadingIndicator = $('#loadingIndicator');
+            loadingIndicator.removeClass('hidden'); // Tampilkan loading indicator
+
+            dataTableInstance = $('#studentDataTable').DataTable({
+                ajax: {
+                    url: MAIN_TAB_DATA_URL, // Mengambil data dari main tab
+                    dataSrc: '', // DataTables akan mengambil data langsung dari root array JSON
+                    error: function (xhr, error, thrown) {
+                        console.error("Error fetching data:", error, thrown);
+                        console.error("XHR response:", xhr.responseText);
+                        loadingIndicator.addClass('hidden'); // Sembunyikan loading indicator
+                        swal("Error", "Gagal memuat data mahasiswa. Pastikan URL Web App benar dan skrip berfungsi.", "error");
+                    }
+                },
+                columns: [
+                    // Kolom sesuai permintaan Anda, diambil dari main tab
+                    { title: "Nomor Absen", data: "Absen" }, // Mengambil data dari kolom 'Absen' di main tab
+                    { title: "Nama", data: "Name" },
+                    {
+                        title: "Absensi (Hadir/Alpha)",
+                        data: "First Tap Status", // Mengambil dari First Tap Status
+                        render: function (data, type, row) {
+                            // Jika First Tap Status adalah "Tepat Waktu" atau "Telat", maka "Hadir"
+                            // Jika kosong atau lainnya, maka "Alpha"
+                            if (data === "Tepat Waktu" || data === "Telat") {
+                                return '<span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Hadir</span>';
+                            } else {
+                                return '<span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">Alpha</span>';
+                            }
+                        }
+                    },
+                    {
+                        title: "Status Absensi", // Tepat Waktu/Telat/Alpha
+                        data: "First Tap Status", // Mengambil dari First Tap Status
+                        render: function (data, type, row) {
+                            if (data === "Tepat Waktu") {
+                                return '<span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">Tepat Waktu</span>';
+                            } else if (data === "Telat") {
+                                return '<span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">Telat</span>';
+                            } else {
+                                return '<span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">Alpha</span>';
+                            }
+                        }
+                    }
+                ],
+                responsive:true,
+                 scrollX: true,
+                paging: true,
+                searching: true,
+                ordering: true,
+                info: true,
+                initComplete: function(settings, json) {
+                    loadingIndicator.addClass('hidden'); // Sembunyikan loading indicator setelah data dimuat
+                }
+            });
+
+            // --- Real-time Update (Polling) ---
+            // Muat ulang data setiap 5 detik (5000 milidetik)
+            setInterval(function () {
+                if (dataTableInstance) {
+                    dataTableInstance.ajax.reload(null, false);
+                    console.log("DataTables reloaded.");
+                }
+            }, 5000); // Reload setiap 5 detik
+        });
+    </script>
+</body>
+</html>

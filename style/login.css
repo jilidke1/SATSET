@@ -1,0 +1,242 @@
+
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #1a1f71, #3a3f9f);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cpath fill='%23ffffff' fill-opacity='0.05' d='M11.1,44.9c-0.6,0-1.2,0.5-1.2,1.2c0,0.6,0.5,1.2,1.2,1.2s1.2-0.5,1.2-1.2C12.2,45.4,11.7,44.9,11.1,44.9z M38.4,44.9 c-0.6,0-1.2,0.5-1.2,1.2c0,0.6,0.5,1.2,1.2,1.2s1.2-0.5,1.2-1.2C39.6,45.4,39.1,44.9,38.4,44.9z M65.8,44.9c-0.6,0-1.2,0.5-1.2,1.2 c0,0.6,0.5,1.2,1.2,1.2c0.6,0,1.2-0.5,1.2-1.2C67,45.4,66.5,44.9,65.8,44.9z M93.1,44.9c-0.6,0-1.2,0.5-1.2,1.2c0,0.6,0.5,1.2,1.2,1.2 s1.2-0.5,1.2-1.2C94.3,45.4,93.8,44.9,93.1,44.9z M11.1,17.6c-0.6,0-1.2,0.5-1.2,1.2c0,0.6,0.5,1.2,1.2,1.2s1.2-0.5,1.2-1.2 C12.2,18.1,11.7,17.6,11.1,17.6z M38.4,17.6c-0.6,0-1.2,0.5-1.2,1.2c0,0.6,0.5,1.2,1.2,1.2s1.2-0.5,1.2-1.2 C39.6,18.1,39.1,17.6,38.4,17.6z M65.8,17.6c-0.6,0-1.2,0.5-1.2,1.2c0,0.6,0.5,1.2,1.2,1.2c0.6,0,1.2-0.5,1.2-1.2 C67,18.1,66.5,17.6,65.8,17.6z M93.1,17.6c-0.6,0-1.2,0.5-1.2,1.2c0,0.6,0.5,1.2,1.2,1.2s1.2-0.5,1.2-1.2 C94.3,18.1,93.8,17.6,93.1,17.6z M11.1,72.3c-0.6,0-1.2,0.5-1.2,1.2c0,0.6,0.5,1.2,1.2,1.2s1.2-0.5,1.2-1.2 C12.2,72.8,11.7,72.3,11.1,72.3z M38.4,72.3c-0.6,0-1.2,0.5-1.2,1.2c0,0.6,0.5,1.2,1.2,1.2s1.2-0.5,1.2-1.2 C39.6,72.8,39.1,72.3,38.4,72.3z M65.8,72.3c-0.6,0-1.2,0.5-1.2,1.2c0,0.6,0.5,1.2,1.2,1.2c0.6,0,1.2-0.5,1.2-1.2 C67,72.8,66.5,72.3,65.8,72.3z M93.1,72.3c-0.6,0-1.2,0.5-1.2,1.2c0,0.6,0.5,1.2,1.2,1.2s1.2-0.5,1.2-1.2 C94.3,72.8,93.8,72.3,93.1,72.3z'/%3E%3C/svg%3E");
+            z-index: -1;
+        }
+        
+        .card {
+            backdrop-filter: blur(10px);
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 1rem;
+            padding: 2rem;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+            z-index: -1;
+        }
+        
+        .input-group {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+        
+        .input-group input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 0.5rem;
+            color: white;
+            transition: all 0.3s ease;
+            z-index: 1;
+        }
+        
+        .input-group input:focus {
+            outline: none;
+            border-color: rgba(255, 255, 255, 0.5);
+            background-color: rgba(255, 255, 255, 0.15);
+        }
+        
+        .input-group label {
+            position: absolute;
+            left: 1rem;
+            top: 0.75rem;
+            color: rgba(255, 255, 255, 0.7);
+            pointer-events: none;
+            transition: all 0.3s ease;
+            z-index: 0;
+        }
+        
+        .input-group input:focus + label,
+        .input-group input:not(:placeholder-shown) + label {
+            transform: translateY(-1.75rem);
+            font-size: 0.75rem;
+            color: white;
+        }
+        
+        .btn-login {
+            width: 100%;
+            padding: 0.75rem;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 0.5rem;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-login::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: all 0.6s ease;
+        }
+        
+        .btn-login:hover::before {
+            left: 100%;
+        }
+        
+        .btn-login:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Lock styling similar to the monitoring page */
+        .lock {
+            width: 80px;
+            height: 100px;
+            position: relative;
+            margin: 0 auto 1.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .lock-shackle {
+            width: 50px;
+            height: 40px;
+            border: 8px solid #F0C419;
+            border-bottom: none;
+            border-radius: 25px 25px 0 0;
+            position: absolute;
+            top: 0;
+            left: 15px;
+            transition: transform 0.5s ease;
+            transform-origin: bottom center;
+        }
+        
+        .lock-body {
+            width: 60px;
+            height: 50px;
+            background: #F0C419;
+            border: 3px solid #E29B29;
+            border-radius: 8px;
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        
+        .lock-keyhole {
+            width: 15px;
+            height: 22px;
+            background: #333;
+            border-radius: 50% 50% 0 0;
+            position: relative;
+        }
+        
+        .lock-keyhole::after {
+            content: '';
+            position: absolute;
+            width: 8px;
+            height: 10px;
+            background: #333;
+            bottom: -4px;
+            left: 3.5px;
+            border-radius: 0 0 5px 5px;
+        }
+        
+        .lock.unlocked .lock-shackle {
+            transform: translateY(-15px);
+        }
+        
+        .password-toggle {
+            position: absolute;
+            right: 1rem;
+            top: 0.75rem;
+            color: rgba(255, 255, 255, 0.7);
+            cursor: pointer;
+            z-index: 2;
+        }
+        
+        .remember-me {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .remember-me input {
+            margin-right: 0.5rem;
+        }
+        
+        @media (max-width: 640px) {
+            .card {
+                padding: 1.5rem;
+                max-width: 90%;
+            }
+            
+            .lock {
+                width: 60px;
+                height: 80px;
+            }
+            
+            .lock-body {
+                width: 45px;
+                height: 40px;
+                left: 7.5px;
+            }
+            
+            .lock-shackle {
+                width: 40px;
+                height: 30px;
+                border-width: 6px;
+                left: 10px;
+            }
+            
+            .lock-keyhole {
+                width: 12px;
+                height: 18px;
+            }
+            
+            .lock-keyhole::after {
+                width: 6px;
+                height: 8px;
+                left: 3px;
+            }
+            
+            .lock.unlocked .lock-shackle {
+                transform: translateY(-10px);
+            }
+        }

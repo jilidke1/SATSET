@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tambah Siswa Baru - SMA 15 Bandar Lampung</title>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+    />
+    <style>
+      body {
+        padding-top: 50px;
+      }
+      .container {
+        max-width: 800px;
+      }
+      .instruction-step {
+        margin-bottom: 25px;
+        padding: 15px;
+        border: 1px solid #eee;
+        border-radius: 4px;
+        background-color: #f9f9f9;
+      }
+      .instruction-step h4 {
+        margin-top: 0;
+        color: #337ab7;
+      }
+      .alert-info {
+        margin-top: 20px;
+      }
+      .highlight-text {
+        color: #d9534f; /* Warna merah Bootstrap */
+        font-weight: bold;
+      }
+      .ButtomButton{
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin-bottom: 5%;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="page-header">
+        <h2 class="text-center">Tambah Siswa Baru</h2>
+        <p class="text-center text-muted">
+          Ikuti langkah-langkah di bawah ini untuk mendaftarkan siswa baru di sistem absensi SMA 15 Bandar Lampung.
+        </p>
+      </div>
+
+      <div class="instruction-step">
+        <h4>Langkah 1: Siapkan Alat Absensi</h4>
+        <p>
+          Pastikan **alat absensi RFID** kita sudah **menyala** dan **terhubung ke internet**.
+          Alat akan menampilkan pesan <span class="highlight-text">"Ready To Scan"</span> di layar LCD-nya.
+        </p>
+      </div>
+
+      <div class="instruction-step">
+        <h4>Langkah 2: Dapatkan UID Kartu Siswa</h4>
+        <p>
+          Ambil **kartu RFID baru** yang belum terdaftar. Minta siswa untuk mendekatkan kartu tersebut ke bagian pembaca RFID pada alat absensi.
+        </p>
+        <p>
+          Jika kartu belum dikenal oleh sistem, layar LCD pada alat akan menampilkan pesan <span class="highlight-text">"Registrasi Berhasil!"</span>. Ini menandakan bahwa kartu memiliki UID unik yang siap didaftarkan.
+        </p>
+        <p class="text-info">
+          *Catatan Penting:* Pada tahap ini, UID kartu sudah terekam sementara di sistem. Anda tidak perlu mencatat UID secara manual dari layar alat.
+        </p>
+      </div>
+
+      <div class="instruction-step">
+        <h4>Langkah 3: Daftarkan UID</h4>
+        <p>
+          Lanjutkan Ke tombol Register dibawah
+        </p>
+        <p>
+          Pilih opsi <span class="highlight-text">"Register New UID"</span>.
+        </p>
+        <p class="alert alert-success">
+          Secara otomatis, UID kartu yang baru saja discan dan belum dikenal oleh alat akan ditambahkan ke daftar siswa Anda!
+        </p>
+      </div>
+
+      <div class="instruction-step">
+        <h4>Langkah 4: Ubah Nama Siswa</h4>
+        <p>
+          Setelah UID baru ditambahkan, Anda akan melihat baris baru di Baru dengan nama default seperti "Person 1" dan Kolom Absen yang masih kosong.
+        </p>
+        <p>
+          Pilih Opsi "Edit" dan Cukup ganti Nama dan Absen maka Siswa tersebut sudah terdaftar di Sistem!
+        </p>
+        <p class="alert alert-warning">
+          Pastikan Anda mengganti nama & Absen siswa 
+        </p>
+      </div>
+
+      <div class="instruction-step">
+        <h4>Langkah 5: Verifikasi Pendaftaran</h4>
+        <p>
+          Siswa kini sudah terdaftar. Anda bisa memverifikasinya dengan:
+        </p>
+        <ul>
+          <li>Minta siswa untuk melakukan scan kartu yang sama lagi pada alat absensi. Alat seharusnya akan menampilkan pesan <span class="highlight-text">"Selamat Datang!"</span> atau status absensi lainnya.</li>
+          <li>Kembali ke halaman utama daftar siswa ini (<a href="index.html">Daftar Siswa</a>) dan cek apakah nama siswa baru tersebut sudah muncul di tabel dengan status yang sesuai.</li>
+        </ul>
+        <p class="alert alert-info">
+          Jika data belum muncul di dashboard, coba tunggu beberapa detik atau refresh halaman. Data akan diperbarui secara otomatis.
+        </p>
+      </div>
+      <div class="ButtomButton">
+        <div class="text-center">
+        <a href="index.html" class="btn btn-primary btn-lg">Kembali ke Daftar Siswa</a>
+      </div>
+      <div class="text-center">
+        <a href="register.html" class="btn btn-primary btn-lg">Lanjut Register Siswa</a>
+      </div>
+      </div>
+      
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  </body>
+</html>

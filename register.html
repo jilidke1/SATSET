@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrasi dan Edit Siswa</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.dataTables.min.css" />
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+        }
+
+        table.dataTable tbody td {
+            text-align: center;
+        }
+
+        table.dataTable thead th {
+            text-align: center;
+        }
+
+        .edit-row {
+            background-color: #f0f9ff;
+
+            
+        }
+    </style>
+</head>
+
+<body class="p-4 sm:p-6 md:p-8">
+    
+    <div class="container mx-auto bg-white shadow-lg rounded-lg p-6 sm:p-8">
+        <h1 class="text-2xl font-bold mb-4">Registrasi dan Edit Siswa</h1>
+        <div class="text-center">
+        <a href="index.html" class="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded mb-4 btn btn-primary btn-lg">Kembali Ke Daftar Siswa</a>
+      </div>
+
+        <button id="registerUIDsButton" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mb-4">
+            Register New UIDs 
+        </button>
+
+        <div class="overflow-x-auto rounded-lg shadow-md">
+            <table id="studentTable" class="min-w-full table-auto">
+                <thead>
+                    <tr>
+                        <th>Nama</th>
+                        <th>Nomor Absen</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        const WEB_APP_BASE_URL = "https://script.google.com/macros/s/AKfycbypohF846t99r8eG5zjblc96oijsHjZ86s5HkrZaYHFoeg_782s72MtuBuhAhBz2Mzw/exec"; 
+        const MAIN_TAB_DATA_URL = WEB_APP_BASE_URL + "?mode=data";
+
+        let dataTable;
+
+        $(document).ready(function() {
+            loadStudentData();
+
+            dataTable = $('#studentTable').DataTable({
+                columns: [
+                    {
+                        title: "Nama",
+                        data: "Name"
+                    },
+                    {
+                        title: "Nomor Absen",
+                        data: "Absen"
+                    },
+                    {
+                        title: "Actions",
+                        data: null,
+                        defaultContent: '<button class="edit-btn bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2">Edit</button>' +
+                            '<button class="delete-btn bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Hapus</button>'
+                    }
+                ],
+                responsive: true,
+                scrollX: true,
+                paging: true,
+                searching: true,
+                ordering: true,
+                info: true,
+            });
+
+             $('#registerUIDsButton').click(function() {
+            Swal.fire({
+                title: 'Konfirmasi',
+                text: 'Are you sure you want to register new UIDs from the History Log?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, Register',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: WEB_APP_BASE_URL + "?mode=registerUIDs", // Tambahkan parameter mode
+                        type: 'GET', // Atau 'POST', tergantung preferensi Anda
+                        dataType: 'json',
+                        success: function(response) {
+                            if (response.result === "success") {
+                                Swal.fire('Success', response.message, 'success');
+                                loadStudentData(); // Refresh data setelah registrasi
+                            } else {
+                                Swal.fire('Success', response.message, 'success');
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            console.error("Error registering UIDs:", error);
+                            Swal.fire('Success', 'Berhasil Menambahkan UID.', 'success');
+                        }
+                    });
+                }
+            });
+        });
+
+            $('#addStudentButton').click(function() {
+                const newName = $('#newName').val();
+                const newAbsen = $('#newAbsen').val();
+
+                if (newName && newAbsen) {
+                    addStudent(newName, newAbsen);
+                } else {
+                    swal("Peringatan", "Harap isi Nama dan Nomor Absen.", "warning");
+                }
+            });
+
+            $('#studentTable tbody').on('click', '.edit-btn', function() {
+                const data = dataTable.row($(this).parents('tr')).data();
+                editStudent(data.UID, data.Name, data.Absen, $(this).closest('tr')); // Kirim UID juga
+            });
+
+            $('#studentTable tbody').on('click', '.delete-btn', function() {
+                const data = dataTable.row($(this).parents('tr')).data();
+                deleteStudent(data.UID);
+            });
+
+           
+        });
+
+        function loadStudentData() {
+            $.ajax({
+                url: MAIN_TAB_DATA_URL,
+                type: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    dataTable.clear().rows.add(data).draw();
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error loading data:", error);
+                    swal("Error", "Gagal memuat data siswa.", "error");
+                }
+            });
+        }
+
+        function addStudent(name, absen) {
+            $.ajax({
+                url: WEB_APP_BASE_URL,
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    mode: 'add',
+                    name: name,
+                    absen: absen
+                }, // Kirim Nama dan Absen
+                success: function(response) {
+                    if (response.result === "success") {
+                        swal("Sukses", response.message, "success");
+                        loadStudentData();
+                        $('#newName').val('');
+                        $('#newAbsen').val('');
+                    } else {
+                        swal("Error", response.message, "error");
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error adding student:", error);
+                    swal("Error", "Gagal menambahkan siswa.", "error");
+                }
+            });
+        }
+
+function editStudent(uid, currentName, currentAbsen, rowElement) {
+        Swal.fire({
+            title: 'Edit Siswa',
+            html: `<div style="display: grid; grid-template-columns: 100px 1fr; grid-gap: 10px; align-items: center;">
+                       <label for="editName" style="text-align: right; margin-right: 5px;">Nama:</label>
+                       <input id="editName" class="swal2-input" value="${currentName}" style="width: 250px; padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+                       <label for="editAbsen" style="text-align: right; margin-right: 5px;">Nomor Absen:</label>
+                       <input id="editAbsen" class="swal2-input" value="${currentAbsen}" style="width: 250px; padding: 8px; border: 1px solid #ccc; border-radius: 4px;">
+                   </div>`,
+            showCancelButton: true,
+            confirmButtonText: 'Simpan',
+            cancelButtonText: 'Batal',
+            buttonsStyling: true, // Aktifkan styling tombol SweetAlert2
+            customClass: {
+                confirmButton: 'my-confirm-button', // Kelas CSS kustom untuk tombol "Simpan"
+                cancelButton: 'my-cancel-button'   // Kelas CSS kustom untuk tombol "Batal"
+            },
+            preConfirm: () => {
+                const name = Swal.getPopup().querySelector('#editName').value;
+                const absen = Swal.getPopup().querySelector('#editAbsen').value;
+                if (!name || !absen) {
+                    Swal.showValidationMessage('Harap isi Nama dan Nomor Absen');
+                }
+                return { name: name, absen: absen };
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Kode AJAX Anda untuk menyimpan data
+                $.ajax({
+                    url: WEB_APP_BASE_URL,
+                    type: 'POST',
+                    dataType: 'json',
+                    data: { mode: 'edit', uid: uid, name: result.value.name, absen: result.value.absen },
+                    success: function(response) {
+                        if (response.result === "success") {
+                            Swal.fire('Sukses', response.message, 'success');
+                            loadStudentData();
+                        } else {
+                            Swal.fire('Error', response.message, 'error');
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("Error editing student:", error);
+                        Swal.fire('Error', 'Gagal mengedit siswa.', 'error');
+                    }
+                });
+            }
+        });
+    }
+    function deleteStudent(uid) {
+    Swal.fire({  // Menggunakan Swal.fire()
+        title: "Hapus Siswa",
+        text: "Apakah Anda yakin ingin menghapus siswa dengan UID " + uid + "?",
+        icon: "warning",
+        showCancelButton: true,  // Mengganti 'buttons'
+        confirmButtonText: "Hapus", // Mengganti teks tombol
+        cancelButtonText: "Batal",
+        dangerMode: true,
+    }).then((result) => {  // Mengganti .then((willDelete))
+        if (result.isConfirmed) { // Mengganti if (willDelete)
+            $.ajax({
+                url: WEB_APP_BASE_URL,
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    mode: 'delete',
+                    uid: uid
+                },
+                success: function(response) {
+                    if (response.result === "success") {
+                        Swal.fire("Sukses", response.message, "success"); // Menggunakan Swal.fire()
+                        loadStudentData();
+                    } else {
+                        Swal.fire("Error", response.message, "error"); // Menggunakan Swal.fire()
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error deleting student:", error);
+                    Swal.fire("Error", "Gagal menghapus siswa.", "error"); // Menggunakan Swal.fire()
+                }
+            });
+        }
+    });
+}
+</script>
+</body>
+
+</html>

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tentang Sistem Absensi RFID - SMA 15 Bandar Lampung</title>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+    />
+    <style>
+      body {
+        padding-top: 50px;
+      }
+      .container {
+        max-width: 800px;
+      }
+      .panel-heading {
+        background-color: #f5f5f5 !important;
+        border-bottom: 1px solid #ddd !important;
+      }
+      .panel-title {
+        color: #333 !important;
+      }
+      .developer-info {
+          margin-top: 30px;
+          padding: 15px;
+          border-top: 1px solid #eee;
+          text-align: center;
+          color: #777;
+          font-size: 0.9em;
+      }
+      .highlight-text {
+        color: #337ab7; /* Warna biru Bootstrap */
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="page-header">
+        <h2 class="text-center">Tentang Sistem Absensi RFID Siswa</h2>
+        <p class="text-center text-muted">
+          Memahami cara kerja alat absensi kami di SMA 15 Bandar Lampung dan status kehadiran siswa.
+        </p>
+      </div>
+
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">Apa Itu Sistem Absensi RFID Ini?</h3>
+        </div>
+        <div class="panel-body">
+          <p>Sistem ini adalah solusi modern untuk mencatat kehadiran siswa di SMA 15 Bandar Lampung secara otomatis dan akurat. Kami menggunakan teknologi **RFID (Radio-Frequency Identification)**, yang mirip dengan cara kerja kartu akses atau e-money, untuk mempermudah proses absensi harian.</p>
+          <p>Melalui dashboard ini, Anda bisa melihat status kehadiran seluruh siswa secara *real-time*, tanpa perlu lagi pencatatan manual yang sering menimbulkan kesalahan.</p>
+        </div>
+      </div>
+
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">Bagaimana Alat Absensi Kami Bekerja?</h3>
+        </div>
+        <div class="panel-body">
+          <p>Alat absensi yang kami kembangkan ini bekerja melalui beberapa tahap sederhana dan terintegrasi:</p>
+          <ol>
+            <li>
+              <strong>Scan Kartu RFID:</strong>
+              Setiap siswa memiliki <span class="highlight-text">"Kartu RFID Unik"</span>. Untuk absen, siswa hanya perlu mendekatkan kartunya ke area pembaca pada alat. Alat akan langsung mengenali identitas kartu tersebut.
+            </li>
+            <li>
+              <strong>Kirim Data ke Internet:</strong>
+              Setelah kartu terbaca, alat akan segera mengirimkan data UID (nomor identitas unik kartu) dan waktu saat itu melalui jaringan internet (Wi-Fi) ke sebuah "otak" di <span class="highlight-text">"Cloud"</span>, yaitu <span class="highlight-text">"Google App Script"</span>.
+            </li>
+            <li>
+              <strong>Proses Data di Google Apps Script:</strong>
+              <span class="highlight-text">Google Apps Script</span> adalah program cerdas yang berjalan di server Google. Di sinilah semua logika absensi berjalan:
+              <ul>
+                <li>Script akan mengecek apakah UID kartu sudah terdaftar di database kami (Google Sheets).</li>
+                <li>Jika sudah terdaftar, script akan mencatat waktu absen, tanggal, dan berapa kali siswa itu sudah absen hari ini.</li>
+                <li>Script juga menentukan status absensi (misal: "Tepat Waktu" atau "Telat") berdasarkan waktu scan.</li>
+                <li>Informasi ini lalu disimpan di Google Sheets, yang berfungsi sebagai database absensi utama kita.</li>
+                <li><span class="highlight-text">"Penting:"</span> Setiap dini hari (pukul 05:00 WIB), Google Apps Script akan secara otomatis me-reset hitungan absensi harian setiap siswa ke nol, sehingga besoknya semua dimulai dari awal lagi. Ini memastikan absensi yang tercatat hanya untuk hari berjalan.</li>
+              </ul>
+            </li>
+            <li>
+              <strong>Feedback di Alat & Dashboard Web:</strong>
+              Setelah data diproses, Google Apps Script akan mengirimkan balasan kembali ke alat absensi. Alat akan menampilkan pesan di layar LCD (misal: "Selamat Datang!", "Anda Telat!", "Sudah Absen Hari Ini!"), serta memberikan indikator visual (lampu LED hijau/kuning/merah) dan suara (buzzer) untuk memberitahu siswa status absensinya.
+              <br><br>
+              Secara bersamaan, data di Google Sheets diperbarui, dan dashboard web yang sedang Anda lihat ini akan Menampilkan status kehadiran terbaru secara 'real-time'. Jadi, pihak sekolah bisa memantau kehadiran kapan saja dengan mudah.
+            </li>
+          </ol>
+          <p>Dengan integrasi antara hardware, cloud, dan web ini, sistem absensi menjadi sangat efisien, transparan, dan mudah digunakan untuk seluruh warga SMA 15 Bandar Lampung.</p>
+        </div>
+      </div>
+
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3 class="panel-title">Memahami "Keterangan Absensi": Alpha, Tepat Waktu, Telat</h3>
+        </div>
+        <div class="panel-body">
+          <p>Pada kolom "Keterangan Absensi" di dashboard, Anda akan melihat beberapa status penting:</p>
+          <ul>
+            <li>
+              <strong style="color: red;">Alpha:</strong>
+              <p>Status ini berarti siswa tersebut <span class="highlight-text ">belum melakukan absensi sama sekali pada hari ini</span>.</p>
+              <p>
+                Sistem kami dirancang untuk me-reset catatan absensi harian setiap dini hari. Jadi, jika seorang siswa tidak melakukan scan kartunya sejak awal hari (dan status "Visits Count" di spreadsheet masih 0), maka statusnya di dashboard akan tercatat sebagai "Alpha".
+              </p>
+            </li>
+            <li>
+              <strong style="color: green;">Tepat Waktu:</strong>
+              <p>Ini adalah status ideal! Diberikan kepada siswa yang sudah melakukan absensi pada rentang jam masuk yang sudah ditentukan.</p>
+              <p>
+                Contohnya, jika jam masuk yang dianggap tepat waktu adalah antara pukul 05:31 pagi hingga 07:30 pagi, maka scan di rentang waktu ini akan dicatat sebagai "Tepat Waktu".
+              </p>
+            </li>
+            <li>
+              <strong style="color: orange;">Telat:</strong>
+              <p>Status ini diberikan jika siswa melakukan absensi setelah batas waktu 'Tepat Waktu' terlewati, namun masih dalam periode jam absensi.</p>
+              <p>
+                Misalnya, jika batas tepat waktu adalah 07:30 pagi, dan siswa melakukan scan pada pukul 07:31 pagi hingga 09:00 pagi, maka statusnya akan menjadi "Telat".
+              </p>
+            </li>
+          </ul>
+          <p class="alert alert-info">
+            Perlu diingat bahwa jam-jam absensi dan batas "Tepat Waktu" / "Telat" ini dapat disesuaikan dalam konfigurasi sistem kami (di Google Apps Script) untuk memenuhi kebutuhan sekolah.
+          </p>
+        </div>
+      </div>
+
+      <div class="developer-info">
+          <p>Dibuat dengan dedikasi oleh: "dapi"</p>
+      </div>
+
+      <div class="text-center">
+        <a href="index.html" class="btn btn-primary btn-lg " style="margin-bottom: 5%;">Kembali ke Daftar Siswa</a>
+      </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  </body>
+</html>
